@@ -8,6 +8,7 @@ package formViews;
 import controller.UtilizadorJpaController;
 import entitys.Utilizador;
 import java.awt.HeadlessException;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import mainViews.MainWindow;
 
@@ -24,6 +25,9 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        
+        utilizador = new Utilizador();
+        utilizadorJpaController = new UtilizadorJpaController();
     }
 
     /**
@@ -49,6 +53,14 @@ public class Login extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(600, 400));
 
         txt_PasswordLogin.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        txt_PasswordLogin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txt_PasswordLoginKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_PasswordLoginKeyReleased(evt);
+            }
+        });
 
         title_login.setFont(new java.awt.Font("Arial Black", 0, 15)); // NOI18N
         title_login.setText("Login");
@@ -56,7 +68,9 @@ public class Login extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         jLabel2.setText("Password");
 
+        btn_login.setBackground(java.awt.Color.lightGray);
         btn_login.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        btn_login.setForeground(java.awt.Color.black);
         btn_login.setText("Entrar");
         btn_login.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -81,7 +95,7 @@ public class Login extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(264, 264, 264)
                 .addComponent(btn_login, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 264, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -94,14 +108,14 @@ public class Login extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(284, 284, 284)
+                .addGap(272, 272, 272)
                 .addComponent(title_login)
-                .addContainerGap(271, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
+                .addContainerGap()
                 .addComponent(title_login)
                 .addGap(60, 60, 60)
                 .addComponent(jLabel1)
@@ -111,9 +125,9 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txt_PasswordLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(54, 54, 54)
+                .addGap(31, 31, 31)
                 .addComponent(btn_login)
-                .addContainerGap(82, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel1);
@@ -126,10 +140,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_loginKeyPressed
 
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
-        utilizador = new Utilizador();
-        utilizadorJpaController = new UtilizadorJpaController();
-
-        try {
+         try {
             utilizador = utilizadorJpaController.findUtilizador(txt_EmailLogin.getText());
 
             if ((utilizador != null) &&
@@ -142,13 +153,45 @@ public class Login extends javax.swing.JFrame {
 
             } else {
 
-                JOptionPane.showMessageDialog(null, "Credenciais incorrectas!");
+                 JOptionPane.showMessageDialog(null
+                        , "Credenciais incorrectas!"
+                        , "Mensagem de Erro"
+                        , JOptionPane.ERROR_MESSAGE);
 
             }
         } catch (HeadlessException e) {
             JOptionPane.showMessageDialog(null, e);
         }
     }//GEN-LAST:event_btn_loginActionPerformed
+
+    private void txt_PasswordLoginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_PasswordLoginKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            try {
+                utilizador = utilizadorJpaController.findUtilizador(txt_EmailLogin.getText());
+
+                if ((utilizador != null) &&
+                    (utilizador.getPassword().equals(txt_PasswordLogin.getText()))) {
+
+                    JOptionPane.showMessageDialog(null, "Credenciais correctas!");
+
+                    dispose();
+                    new MainWindow().setVisible(true);
+
+                } else {
+
+                    JOptionPane.showMessageDialog(null, "Credenciais incorrectas!");
+
+                }
+            } catch (HeadlessException e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }//GEN-LAST:event_txt_PasswordLoginKeyPressed
+
+    private void txt_PasswordLoginKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_PasswordLoginKeyReleased
+        // TODO add your handling code here:
+     
+    }//GEN-LAST:event_txt_PasswordLoginKeyReleased
 
     /**
      * @param args the command line arguments
