@@ -10,16 +10,24 @@ import controller.FornecedorJpaController;
 import controller.ProdutoJpaController;
 import entitys.Aquisicao;
 import entitys.Fornecedor;
+import entitys.Loja;
 import entitys.Produto;
+import java.awt.event.KeyEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import mainViews.MainLoja;
+import productsView.AquisicoesView;
 
 /**
  *
  * @author aderito
  */
 public class CadastrarProduto extends javax.swing.JFrame {
+    Loja loja;
     Produto produto;
     Aquisicao aquisicao;
+    MainLoja mainLoja;
     AquisicaoJpaController ajc;
     ProdutoJpaController pjc;
     
@@ -29,6 +37,10 @@ public class CadastrarProduto extends javax.swing.JFrame {
     public CadastrarProduto() {
         initComponents();
         
+        produto = new Produto();
+        aquisicao = new Aquisicao();
+        ajc = new AquisicaoJpaController();
+        pjc = new ProdutoJpaController();
         FornecedorJpaController fjc = new FornecedorJpaController();
         
         for(Fornecedor f: fjc.findFornecedorEntities()){
@@ -63,9 +75,9 @@ public class CadastrarProduto extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         txt_PrecoVenda = new javax.swing.JTextField();
         cBox_fornecedor = new javax.swing.JComboBox<>();
+        btn_goBack_MainLoja = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(600, 400));
 
         jPanel1.setPreferredSize(new java.awt.Dimension(600, 400));
 
@@ -83,6 +95,11 @@ public class CadastrarProduto extends javax.swing.JFrame {
         btn_cadastrarProduto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_cadastrarProdutoActionPerformed(evt);
+            }
+        });
+        btn_cadastrarProduto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btn_cadastrarProdutoKeyPressed(evt);
             }
         });
 
@@ -106,53 +123,58 @@ public class CadastrarProduto extends javax.swing.JFrame {
 
         txt_PrecoVenda.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
 
+        btn_goBack_MainLoja.setText("<--");
+        btn_goBack_MainLoja.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_goBack_MainLojaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txt_PrecoCompra)
+                    .addComponent(txt_PrecoVenda)
+                    .addComponent(cBox_fornecedor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txt_NomeProduto)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
+                        .addComponent(spinner_qtdAquisicao, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(41, 41, 41)
+                        .addComponent(datePicker_dataAquisicao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txt_PrecoCompra)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(41, 41, 41)
-                                .addComponent(jLabel5)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(txt_PrecoVenda)
-                            .addComponent(cBox_fornecedor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel5))
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel2))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(txt_NomeProduto)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(207, 207, 207)
-                        .addComponent(title_cad_Produto)
-                        .addGap(0, 212, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(spinner_qtdAquisicao, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(41, 41, 41)
-                        .addComponent(datePicker_dataAquisicao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(btn_goBack_MainLoja)
+                                .addGap(165, 165, 165)
+                                .addComponent(title_cad_Produto)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(260, 260, 260)
                 .addComponent(btn_cadastrarProduto)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(265, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(title_cad_Produto)
-                .addGap(7, 7, 7)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(title_cad_Produto)
+                    .addComponent(btn_goBack_MainLoja))
+                .addGap(25, 25, 25)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txt_NomeProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -189,30 +211,27 @@ public class CadastrarProduto extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 412, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_cadastrarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cadastrarProdutoActionPerformed
-        produto = new Produto();
-        aquisicao = new Aquisicao();
-        ajc = new AquisicaoJpaController();
-        pjc = new ProdutoJpaController();
-        
-        try {
-            
+      
+        try {      
             produto.setNome(txt_NomeProduto.getText());
             produto.setPrecoCompra(Double.parseDouble(txt_PrecoCompra.getText()));
             produto.setPrecoVenda(Double.parseDouble(txt_PrecoVenda.getText()));
-            produto.setIdloja(null);
+            produto.setIdloja(loja);
             
             pjc.create(produto);
 
             aquisicao.setDataAquisicao(datePicker_dataAquisicao.getDate());
             aquisicao.setQtdAdquirida((Integer) spinner_qtdAquisicao.getValue());
-            aquisicao.setIdproduto(produto);
+            aquisicao.setIdproduto(produto.getIdproduto());
             
             aquisicao.setIdfornecedor((Fornecedor) cBox_fornecedor.getSelectedItem());
             ajc.create(aquisicao);
@@ -222,15 +241,76 @@ public class CadastrarProduto extends javax.swing.JFrame {
                     , "Mensagem"
                     , JOptionPane.INFORMATION_MESSAGE);
             
+            AquisicoesView aquisicoesView = new AquisicoesView();
+                
+            dispose();
+            aquisicoesView.setIdLoja(loja);
+            aquisicoesView.setVisible(true);
+            
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null
                     , e.getMessage()
                     , "Mensagem de Erro"
                     , JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(CadastrarProduto.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }//GEN-LAST:event_btn_cadastrarProdutoActionPerformed
 
+    private void btn_goBack_MainLojaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_goBack_MainLojaActionPerformed
+        // TODO add your handling code here:
+        dispose();
+        mainLoja = new MainLoja();
+        mainLoja.setLoja(loja);
+        mainLoja.setVisible(true);
+    }//GEN-LAST:event_btn_goBack_MainLojaActionPerformed
+
+    private void btn_cadastrarProdutoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_cadastrarProdutoKeyPressed
+
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){           
+            try {
+
+                produto.setNome(txt_NomeProduto.getText());
+                produto.setPrecoCompra(Double.parseDouble(txt_PrecoCompra.getText()));
+                produto.setPrecoVenda(Double.parseDouble(txt_PrecoVenda.getText()));
+                produto.setIdloja(loja);
+
+                pjc.create(produto);
+
+                aquisicao.setDataAquisicao(datePicker_dataAquisicao.getDate());
+                aquisicao.setQtdAdquirida((Integer) spinner_qtdAquisicao.getValue());
+                aquisicao.setIdproduto(produto.getIdproduto());
+
+                aquisicao.setIdfornecedor((Fornecedor) cBox_fornecedor.getSelectedItem());
+                ajc.create(aquisicao);
+
+                JOptionPane.showMessageDialog(null
+                        , "Produto cadastrado com sucesso!"
+                        , "Mensagem"
+                        , JOptionPane.INFORMATION_MESSAGE);
+
+                AquisicoesView aquisicoesView = new AquisicoesView();
+                
+                dispose();
+                aquisicoesView.setIdLoja(loja);
+                aquisicoesView.setVisible(true);
+
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null
+                        , e.getMessage()
+                        , "Mensagem de Erro"
+                        , JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                Logger.getLogger(CadastrarProduto.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btn_cadastrarProdutoKeyPressed
+
+    public void setIdLoja(Loja loja){
+        this.loja = loja;
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -270,6 +350,7 @@ public class CadastrarProduto extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.persistence.EntityManager SistemaGestaoStockPUEntityManager;
     private javax.swing.JButton btn_cadastrarProduto;
+    private javax.swing.JButton btn_goBack_MainLoja;
     private javax.swing.JComboBox<Object> cBox_fornecedor;
     private org.jdesktop.swingx.JXDatePicker datePicker_dataAquisicao;
     private java.util.List<entitys.Fornecedor> fornecedorList;

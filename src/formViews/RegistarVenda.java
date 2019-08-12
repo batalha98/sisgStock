@@ -5,31 +5,38 @@
  */
 package formViews;
 
+import controller.AquisicaoJpaController;
 import controller.ProdutoJpaController;
 import controller.VendaJpaController;
+import entitys.Aquisicao;
+import entitys.Loja;
 import entitys.Produto;
 import entitys.Venda;
+import java.util.Date;
 import javax.swing.JOptionPane;
+import mainViews.MainLoja;
+import productsView.VendasView;
 
 /**
  *
  * @author aderito
  */
 public class RegistarVenda extends javax.swing.JFrame {
+    Loja loja;
     Venda venda;
+    VendasView vendasView;
+    MainLoja mainLoja;
+    AquisicaoJpaController ajc;
     VendaJpaController vjc;
+    Produto produto;
+    Aquisicao aquisicao;
+    ProdutoJpaController pjc;
     
     /**
      * Creates new form registarVenda
      */
     public RegistarVenda() {
         initComponents();
-        
-        ProdutoJpaController pjc = new ProdutoJpaController();
-        
-        for(Produto p: pjc.findProdutoEntities()){
-            cBox_produto.addItem(p);
-        }
     }
 
     /**
@@ -50,9 +57,9 @@ public class RegistarVenda extends javax.swing.JFrame {
         btn_registarVenda = new javax.swing.JButton();
         spinner_qtdVenda = new javax.swing.JSpinner();
         datePicker_dataVenda = new org.jdesktop.swingx.JXDatePicker();
+        btn_goBack_MainLoja = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(600, 400));
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         jLabel1.setText("Nome do Produto");
@@ -67,6 +74,11 @@ public class RegistarVenda extends javax.swing.JFrame {
         title_regVenda.setText("Registar Venda");
 
         cBox_produto.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        cBox_produto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cBox_produtoActionPerformed(evt);
+            }
+        });
 
         btn_registarVenda.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         btn_registarVenda.setText("vender");
@@ -84,45 +96,53 @@ public class RegistarVenda extends javax.swing.JFrame {
             }
         });
 
+        btn_goBack_MainLoja.setText("<--");
+        btn_goBack_MainLoja.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_goBack_MainLojaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(cBox_produto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spinner_qtdVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(41, 41, 41)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(datePicker_dataVenda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(230, 230, 230)
-                .addComponent(title_regVenda)
-                .addContainerGap(229, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(270, Short.MAX_VALUE)
                 .addComponent(btn_registarVenda)
                 .addGap(274, 274, 274))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cBox_produto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(spinner_qtdVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addGap(41, 41, 41)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(datePicker_dataVenda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btn_goBack_MainLoja)
+                                .addGap(183, 183, 183)
+                                .addComponent(title_regVenda)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(title_regVenda)
-                .addGap(60, 60, 60)
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(title_regVenda)
+                    .addComponent(btn_goBack_MainLoja))
+                .addGap(52, 52, 52)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cBox_produto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -134,7 +154,7 @@ public class RegistarVenda extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(datePicker_dataVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(spinner_qtdVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
                 .addComponent(btn_registarVenda)
                 .addGap(40, 40, 40))
         );
@@ -158,31 +178,88 @@ public class RegistarVenda extends javax.swing.JFrame {
     }//GEN-LAST:event_datePicker_dataVendaActionPerformed
 
     private void btn_registarVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_registarVendaActionPerformed
+        vendasView = new VendasView();
         venda = new Venda();
         vjc = new VendaJpaController();
         
-        venda.setDataVenda(datePicker_dataVenda.getDate());
-        venda.setQtdVendido((Integer) spinner_qtdVenda.getValue());
-        venda.setIdproduto((Produto) cBox_produto.getSelectedItem());
+        int qtdAvender = (Integer) spinner_qtdVenda.getValue();
+        Date dataVenda = datePicker_dataVenda.getDate();
         
-        try {
+        if((aquisicao.getQtdAdquirida() > 0) 
+                && (aquisicao.getQtdAdquirida() >= qtdAvender)){
+            int qtdAdquirida = aquisicao.getQtdAdquirida();
             
-            vjc.create(venda);
-            
-            JOptionPane.showMessageDialog(null
-                    , "Venda registada com sucesso!"
-                    , "Mensagem"
-                    , JOptionPane.INFORMATION_MESSAGE);
+            venda.setDataVenda(dataVenda);
+            venda.setQtdVendido(qtdAvender);
+            venda.setIdproduto(produto);
         
-        } catch (Exception e) {
+            try {
+                
+                vjc.create(venda);
+
+                aquisicao.setQtdAdquirida(qtdAdquirida - qtdAvender);
+              
+                ajc.edit(aquisicao);
+                
+                JOptionPane.showMessageDialog(null
+                        , "Venda registada com sucesso!"
+                        , "Mensagem"
+                        , JOptionPane.INFORMATION_MESSAGE);
+
+                dispose();
+                vendasView.setIdLoja(loja);
+                vendasView.setVisible(true);
+            
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null
+                    , ex.getMessage()
+                    , "Mensagem de Erro"
+                    , JOptionPane.ERROR_MESSAGE);
+            }
+            
+        } else{
             JOptionPane.showMessageDialog(null
-                    , e.getMessage()
+                    , "A quantidade do produto no stock e insuficiente!"
                     , "Mensagem de Erro"
                     , JOptionPane.ERROR_MESSAGE);
         }
         
     }//GEN-LAST:event_btn_registarVendaActionPerformed
 
+    private void btn_goBack_MainLojaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_goBack_MainLojaActionPerformed
+        // TODO add your handling code here:
+        
+        dispose();
+        mainLoja = new MainLoja();
+        mainLoja.setLoja(loja);
+        mainLoja.setVisible(true);
+    }//GEN-LAST:event_btn_goBack_MainLojaActionPerformed
+
+    private void cBox_produtoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cBox_produtoActionPerformed
+        // TODO add your handling code here:
+        ajc = new AquisicaoJpaController();
+        
+        produto = (Produto) cBox_produto.getSelectedItem();
+        aquisicao = ajc.findAquisicao(produto.getIdproduto());
+        
+        spinner_qtdVenda.setValue(aquisicao.getQtdAdquirida());
+    }//GEN-LAST:event_cBox_produtoActionPerformed
+
+    public void setIdLoja(Loja shop){
+        loja = shop;
+        aquisicao = new Aquisicao();
+        ajc = new AquisicaoJpaController();
+        pjc = new ProdutoJpaController();
+        
+        for(Produto p: pjc.buscarProdutosPorLoja(loja.getIdloja())){
+            aquisicao = ajc.findAquisicao(p.getIdproduto());
+            
+            if(aquisicao.getQtdAdquirida() > 0){
+                cBox_produto.addItem(p);
+            }
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -213,6 +290,7 @@ public class RegistarVenda extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new RegistarVenda().setVisible(true);
             }
@@ -220,6 +298,7 @@ public class RegistarVenda extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_goBack_MainLoja;
     private javax.swing.JButton btn_registarVenda;
     private javax.swing.JComboBox<Object> cBox_produto;
     private org.jdesktop.swingx.JXDatePicker datePicker_dataVenda;

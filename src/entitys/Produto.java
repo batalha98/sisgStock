@@ -56,8 +56,6 @@ public class Produto implements Serializable {
     @JoinColumn(name = "idloja", referencedColumnName = "idloja")
     @ManyToOne
     private Loja idloja;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idproduto")
-    private List<Aquisicao> aquisicaoList;
 
     public Produto() {
     }
@@ -115,15 +113,6 @@ public class Produto implements Serializable {
         this.idloja = idloja;
     }
 
-    @XmlTransient
-    public List<Aquisicao> getAquisicaoList() {
-        return aquisicaoList;
-    }
-
-    public void setAquisicaoList(List<Aquisicao> aquisicaoList) {
-        this.aquisicaoList = aquisicaoList;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -146,7 +135,7 @@ public class Produto implements Serializable {
 
     @Override
     public String toString() {
-        return getNome();
+        return nome;
     }
     
 }

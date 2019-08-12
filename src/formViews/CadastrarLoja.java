@@ -7,7 +7,11 @@ package formViews;
 
 import controller.LojaJpaController;
 import entitys.Loja;
+import java.awt.event.KeyEvent;
+import javax.swing.Icon;
 import javax.swing.JOptionPane;
+import mainViews.Lojas;
+import mainViews.MainWindow;
 
 /**
  *
@@ -22,6 +26,9 @@ public class CadastrarLoja extends javax.swing.JFrame {
      */
     public CadastrarLoja() {
         initComponents();
+        
+        loja = new Loja();
+        ljc = new LojaJpaController();
     }
 
     /**
@@ -45,6 +52,7 @@ public class CadastrarLoja extends javax.swing.JFrame {
         title_cad_loja = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txt_contacto = new javax.swing.JTextField();
+        btn_back = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,6 +86,11 @@ public class CadastrarLoja extends javax.swing.JFrame {
                 btn_CadastrarLojaActionPerformed(evt);
             }
         });
+        btn_CadastrarLoja.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btn_CadastrarLojaKeyPressed(evt);
+            }
+        });
 
         title_cad_loja.setFont(new java.awt.Font("Arial Black", 1, 15)); // NOI18N
         title_cad_loja.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -88,43 +101,56 @@ public class CadastrarLoja extends javax.swing.JFrame {
 
         txt_contacto.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
 
+        btn_back.setText("<--");
+        btn_back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_backActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(title_cad_loja)
-                .addGap(135, 135, 135))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(149, 149, 149)
-                        .addComponent(btn_CadastrarLoja))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel4)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txt_LocalLoja, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txt_NomeLoja)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txt_LocalLoja, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txt_NomeLoja)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(txt_contacto, javax.swing.GroupLayout.Alignment.TRAILING)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(0, 292, Short.MAX_VALUE))
-                    .addComponent(txt_contacto, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel4))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(259, 259, 259)
+                                .addComponent(btn_CadastrarLoja))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(btn_back)
+                                .addGap(181, 181, 181)
+                                .addComponent(title_cad_loja)))
+                        .addGap(0, 227, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(title_cad_loja)
-                .addGap(32, 32, 32)
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(title_cad_loja)
+                    .addComponent(btn_back))
+                .addGap(25, 25, 25)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txt_NomeLoja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -149,16 +175,11 @@ public class CadastrarLoja extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -169,9 +190,6 @@ public class CadastrarLoja extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_NomeLojaActionPerformed
 
     private void btn_CadastrarLojaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_CadastrarLojaActionPerformed
-        loja = new Loja();
-        ljc = new LojaJpaController();
-        
         loja.setNome(txt_NomeLoja.getText());
         loja.setContacto(txt_contacto.getText());
         loja.setLocalizacao(txt_LocalLoja.getText());
@@ -186,6 +204,9 @@ public class CadastrarLoja extends javax.swing.JFrame {
                     , "Mensagem"
                     , JOptionPane.INFORMATION_MESSAGE);
             
+            dispose();
+            new Lojas().setVisible(true);
+            
         } catch (Exception e) {
             
             JOptionPane.showMessageDialog(null
@@ -195,6 +216,45 @@ public class CadastrarLoja extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_btn_CadastrarLojaActionPerformed
+
+    private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
+        // TODO add your handling code here:
+        
+        dispose();
+        new MainWindow().setVisible(true);
+    }//GEN-LAST:event_btn_backActionPerformed
+
+    private void btn_CadastrarLojaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_CadastrarLojaKeyPressed
+        // TODO add your handling code here:   
+        
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            loja.setNome(txt_NomeLoja.getText());
+            loja.setContacto(txt_contacto.getText());
+            loja.setLocalizacao(txt_LocalLoja.getText());
+            loja.setDescricao(txt_DescricaoLoja.getText());
+
+            try {
+
+                ljc.create(loja);
+
+                JOptionPane.showMessageDialog(null
+                        , "Loja cadastrada com sucesso!"
+                        , "Mensagem"
+                        , JOptionPane.INFORMATION_MESSAGE);
+
+                dispose();
+                new Lojas().setVisible(true);
+
+            } catch (Exception e) {
+
+                JOptionPane.showMessageDialog(null
+                        , e.getMessage()
+                        , "Mensagem de Erro"
+                        , JOptionPane.ERROR_MESSAGE);
+
+            }
+        }
+    }//GEN-LAST:event_btn_CadastrarLojaKeyPressed
 
     /**
      * @param args the command line arguments
@@ -234,6 +294,7 @@ public class CadastrarLoja extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_CadastrarLoja;
+    private javax.swing.JButton btn_back;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

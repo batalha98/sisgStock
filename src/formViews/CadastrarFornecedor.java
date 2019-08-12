@@ -7,7 +7,9 @@ package formViews;
 
 import controller.FornecedorJpaController;
 import entitys.Fornecedor;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
+import mainViews.MainWindow;
 
 /**
  *
@@ -22,6 +24,9 @@ public class CadastrarFornecedor extends javax.swing.JFrame {
      */
     public CadastrarFornecedor() {
         initComponents();
+        
+        fornecedor = new Fornecedor();
+        fjc = new FornecedorJpaController();
     }
 
     /**
@@ -43,6 +48,7 @@ public class CadastrarFornecedor extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         txt_ContactoFornecedor = new javax.swing.JTextField();
         btn_cadastrarFornecedor = new javax.swing.JButton();
+        btn_goBackMain = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -81,50 +87,55 @@ public class CadastrarFornecedor extends javax.swing.JFrame {
                 btn_cadastrarFornecedorActionPerformed(evt);
             }
         });
+        btn_cadastrarFornecedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btn_cadastrarFornecedorKeyPressed(evt);
+            }
+        });
+
+        btn_goBackMain.setText("<--");
+        btn_goBackMain.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_goBackMainActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(100, 100, 100)
-                                .addComponent(title_cad_fornecedor))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel2))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel3))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel4))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel5)))
-                        .addGap(0, 88, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txt_ContactoFornecedor, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txt_EmailFornecedor, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txt_LocalFornecedor, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txt_NomeFornecedor)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txt_ContactoFornecedor)
-                            .addComponent(txt_EmailFornecedor)
-                            .addComponent(txt_LocalFornecedor)
-                            .addComponent(txt_NomeFornecedor, javax.swing.GroupLayout.Alignment.LEADING))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btn_goBackMain)
+                                .addGap(145, 145, 145)
+                                .addComponent(title_cad_fornecedor)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(167, 167, 167)
+                .addGap(255, 255, 255)
                 .addComponent(btn_cadastrarFornecedor)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(272, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(title_cad_fornecedor)
-                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(title_cad_fornecedor)
+                    .addComponent(btn_goBackMain))
+                .addGap(27, 27, 27)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txt_NomeFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -142,7 +153,7 @@ public class CadastrarFornecedor extends javax.swing.JFrame {
                 .addComponent(txt_ContactoFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btn_cadastrarFornecedor)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         pack();
@@ -153,9 +164,6 @@ public class CadastrarFornecedor extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_NomeFornecedorActionPerformed
 
     private void btn_cadastrarFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cadastrarFornecedorActionPerformed
-        fornecedor = new Fornecedor();
-        fjc = new FornecedorJpaController();
-        
         fornecedor.setNome(txt_NomeFornecedor.getText());
         fornecedor.setEmail(txt_EmailFornecedor.getText());
         fornecedor.setLocalizacao(txt_LocalFornecedor.getText());
@@ -178,6 +186,40 @@ public class CadastrarFornecedor extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_btn_cadastrarFornecedorActionPerformed
+
+    private void btn_cadastrarFornecedorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_cadastrarFornecedorKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            fornecedor.setNome(txt_NomeFornecedor.getText());
+            fornecedor.setEmail(txt_EmailFornecedor.getText());
+            fornecedor.setLocalizacao(txt_LocalFornecedor.getText());
+            fornecedor.setContacto(txt_ContactoFornecedor.getText());
+
+            try {
+
+                fjc.create(fornecedor);
+
+                JOptionPane.showMessageDialog(null
+                        , "Fornecedor cadastrado com sucesso!"
+                        , "Mensagem"
+                        , JOptionPane.INFORMATION_MESSAGE); 
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null
+                        , e.getMessage()
+                        , "Mensagem de Erro"
+                        , JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btn_cadastrarFornecedorKeyPressed
+
+    private void btn_goBackMainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_goBackMainActionPerformed
+        // TODO add your handling code here:
+        
+        dispose();
+        new MainWindow().setVisible(true);
+        
+    }//GEN-LAST:event_btn_goBackMainActionPerformed
 
     /**
      * @param args the command line arguments
@@ -217,6 +259,7 @@ public class CadastrarFornecedor extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_cadastrarFornecedor;
+    private javax.swing.JButton btn_goBackMain;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

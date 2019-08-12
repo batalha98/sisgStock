@@ -131,7 +131,7 @@ public class Loja implements Serializable {
 
     @Override
     public String toString() {
-        return "entitys.Loja[ idloja=" + idloja + " ]";
+        return nome;
     }
     
 }

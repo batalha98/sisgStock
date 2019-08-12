@@ -6,6 +6,7 @@
 package controller;
 
 import controller.exceptions.NonexistentEntityException;
+import controller.exceptions.PreexistingEntityException;
 import entitys.Aquisicao;
 import java.io.Serializable;
 import javax.persistence.Query;
@@ -13,7 +14,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import entitys.Fornecedor;
-import entitys.Produto;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -34,7 +34,7 @@ public class AquisicaoJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Aquisicao aquisicao) {
+    public void create(Aquisicao aquisicao) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -44,21 +44,17 @@ public class AquisicaoJpaController implements Serializable {
                 idfornecedor = em.getReference(idfornecedor.getClass(), idfornecedor.getIdfornecedor());
                 aquisicao.setIdfornecedor(idfornecedor);
             }
-            Produto idproduto = aquisicao.getIdproduto();
-            if (idproduto != null) {
-                idproduto = em.getReference(idproduto.getClass(), idproduto.getIdproduto());
-                aquisicao.setIdproduto(idproduto);
-            }
             em.persist(aquisicao);
             if (idfornecedor != null) {
                 idfornecedor.getAquisicaoList().add(aquisicao);
                 idfornecedor = em.merge(idfornecedor);
             }
-            if (idproduto != null) {
-                idproduto.getAquisicaoList().add(aquisicao);
-                idproduto = em.merge(idproduto);
-            }
             em.getTransaction().commit();
+        } catch (Exception ex) {
+            if (findAquisicao(aquisicao.getIdproduto()) != null) {
+                throw new PreexistingEntityException("Aquisicao " + aquisicao + " already exists.", ex);
+            }
+            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -71,18 +67,12 @@ public class AquisicaoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Aquisicao persistentAquisicao = em.find(Aquisicao.class, aquisicao.getIdaquisicao());
+            Aquisicao persistentAquisicao = em.find(Aquisicao.class, aquisicao.getIdproduto());
             Fornecedor idfornecedorOld = persistentAquisicao.getIdfornecedor();
             Fornecedor idfornecedorNew = aquisicao.getIdfornecedor();
-            Produto idprodutoOld = persistentAquisicao.getIdproduto();
-            Produto idprodutoNew = aquisicao.getIdproduto();
             if (idfornecedorNew != null) {
                 idfornecedorNew = em.getReference(idfornecedorNew.getClass(), idfornecedorNew.getIdfornecedor());
                 aquisicao.setIdfornecedor(idfornecedorNew);
-            }
-            if (idprodutoNew != null) {
-                idprodutoNew = em.getReference(idprodutoNew.getClass(), idprodutoNew.getIdproduto());
-                aquisicao.setIdproduto(idprodutoNew);
             }
             aquisicao = em.merge(aquisicao);
             if (idfornecedorOld != null && !idfornecedorOld.equals(idfornecedorNew)) {
@@ -93,19 +83,11 @@ public class AquisicaoJpaController implements Serializable {
                 idfornecedorNew.getAquisicaoList().add(aquisicao);
                 idfornecedorNew = em.merge(idfornecedorNew);
             }
-            if (idprodutoOld != null && !idprodutoOld.equals(idprodutoNew)) {
-                idprodutoOld.getAquisicaoList().remove(aquisicao);
-                idprodutoOld = em.merge(idprodutoOld);
-            }
-            if (idprodutoNew != null && !idprodutoNew.equals(idprodutoOld)) {
-                idprodutoNew.getAquisicaoList().add(aquisicao);
-                idprodutoNew = em.merge(idprodutoNew);
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = aquisicao.getIdaquisicao();
+                Integer id = aquisicao.getIdproduto();
                 if (findAquisicao(id) == null) {
                     throw new NonexistentEntityException("The aquisicao with id " + id + " no longer exists.");
                 }
@@ -126,7 +108,7 @@ public class AquisicaoJpaController implements Serializable {
             Aquisicao aquisicao;
             try {
                 aquisicao = em.getReference(Aquisicao.class, id);
-                aquisicao.getIdaquisicao();
+                aquisicao.getIdproduto();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The aquisicao with id " + id + " no longer exists.", enfe);
             }
@@ -134,11 +116,6 @@ public class AquisicaoJpaController implements Serializable {
             if (idfornecedor != null) {
                 idfornecedor.getAquisicaoList().remove(aquisicao);
                 idfornecedor = em.merge(idfornecedor);
-            }
-            Produto idproduto = aquisicao.getIdproduto();
-            if (idproduto != null) {
-                idproduto.getAquisicaoList().remove(aquisicao);
-                idproduto = em.merge(idproduto);
             }
             em.remove(aquisicao);
             em.getTransaction().commit();

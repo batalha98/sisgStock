@@ -5,17 +5,34 @@
  */
 package mainViews;
 
+import controller.LojaJpaController;
+import entitys.Loja;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author aderito
  */
 public class Lojas extends javax.swing.JFrame {
-
+    LojaJpaController lojaJpaController;
+    MainLoja mainLoja;
+    List<Loja> lojas;
+    
     /**
      * Creates new form MainWindows
      */
     public Lojas() {
         initComponents();
+        
+        lojas = new ArrayList<>();
+        lojaJpaController = new LojaJpaController();
+        
+        lojas = lojaJpaController.findLojaEntities();
+        
+        for(Loja loja: lojas){
+            cBox_lojas.addItem(loja);
+        }
     }
 
     /**
@@ -28,32 +45,86 @@ public class Lojas extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        btn_gotoShop = new javax.swing.JButton();
+        cBox_lojas = new javax.swing.JComboBox<>();
+        btn_goBack = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Arial Black", 0, 15)); // NOI18N
         jLabel1.setText("Lojas Cadastradas");
 
+        btn_gotoShop.setText("Ir a loja");
+        btn_gotoShop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_gotoShopActionPerformed(evt);
+            }
+        });
+
+        btn_goBack.setText("<--");
+        btn_goBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_goBackActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        jLabel2.setText("Selecione uma loja");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(218, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+                .addContainerGap()
+                .addComponent(btn_goBack)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 174, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_gotoShop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cBox_lojas, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(229, 229, 229))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(237, 237, 237)
+                .addComponent(jLabel2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel1)
-                .addContainerGap(338, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(btn_goBack))
+                .addGap(81, 81, 81)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cBox_lojas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(91, 91, 91)
+                .addComponent(btn_gotoShop)
+                .addContainerGap(100, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btn_gotoShopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_gotoShopActionPerformed
+        dispose();
+        mainLoja = new MainLoja();
+        mainLoja.setLoja((Loja) cBox_lojas.getSelectedItem());
+        mainLoja.setVisible(true);
+   
+    }//GEN-LAST:event_btn_gotoShopActionPerformed
+
+    private void btn_goBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_goBackActionPerformed
+        // TODO add your handling code here:
+        
+        dispose();
+        new MainWindow().setVisible(true);
+    }//GEN-LAST:event_btn_goBackActionPerformed
+
+    
     /**
      * @param args the command line arguments
      */
@@ -93,6 +164,10 @@ public class Lojas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_goBack;
+    private javax.swing.JButton btn_gotoShop;
+    private javax.swing.JComboBox<Object> cBox_lojas;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }

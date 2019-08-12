@@ -44,7 +44,7 @@ public class FornecedorJpaController implements Serializable {
             em.getTransaction().begin();
             List<Aquisicao> attachedAquisicaoList = new ArrayList<Aquisicao>();
             for (Aquisicao aquisicaoListAquisicaoToAttach : fornecedor.getAquisicaoList()) {
-                aquisicaoListAquisicaoToAttach = em.getReference(aquisicaoListAquisicaoToAttach.getClass(), aquisicaoListAquisicaoToAttach.getIdaquisicao());
+                aquisicaoListAquisicaoToAttach = em.getReference(aquisicaoListAquisicaoToAttach.getClass(), aquisicaoListAquisicaoToAttach.getIdproduto());
                 attachedAquisicaoList.add(aquisicaoListAquisicaoToAttach);
             }
             fornecedor.setAquisicaoList(attachedAquisicaoList);
@@ -76,7 +76,7 @@ public class FornecedorJpaController implements Serializable {
             List<Aquisicao> aquisicaoListNew = fornecedor.getAquisicaoList();
             List<Aquisicao> attachedAquisicaoListNew = new ArrayList<Aquisicao>();
             for (Aquisicao aquisicaoListNewAquisicaoToAttach : aquisicaoListNew) {
-                aquisicaoListNewAquisicaoToAttach = em.getReference(aquisicaoListNewAquisicaoToAttach.getClass(), aquisicaoListNewAquisicaoToAttach.getIdaquisicao());
+                aquisicaoListNewAquisicaoToAttach = em.getReference(aquisicaoListNewAquisicaoToAttach.getClass(), aquisicaoListNewAquisicaoToAttach.getIdproduto());
                 attachedAquisicaoListNew.add(aquisicaoListNewAquisicaoToAttach);
             }
             aquisicaoListNew = attachedAquisicaoListNew;

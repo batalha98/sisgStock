@@ -10,6 +10,12 @@
     <class>entitys.Produto</class>
     <class>entitys.Fornecedor</class>
     <class>entitys.Aquisicao</class>
+    <class>formViews.Aquisicao</class>
+    <class>formViews.Fornecedor</class>
+    <class>formViews.Venda</class>
+    <class>formViews.Loja</class>
+    <class>formViews.Utilizador</class>
+    <class>formViews.Produto</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/gestaoStockDB?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
