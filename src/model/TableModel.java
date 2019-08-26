@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entitys;
+package model;
 
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
@@ -18,8 +18,8 @@ public class TableModel extends AbstractTableModel{
     private String[] colunas = null;
  
     public TableModel(ArrayList lin, String[] col){
-        setLinhas(lin);
-        setColunas(col);
+        this.linhas = lin;
+        this.colunas = col;
     }
 
     public ArrayList getLinhas() {

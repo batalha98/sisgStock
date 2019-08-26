@@ -7,11 +7,14 @@ package productsView;
 
 import controller.AquisicaoJpaController;
 import controller.ProdutoJpaController;
-import entitys.Aquisicao;
-import entitys.Loja;
-import entitys.Produto;
-import entitys.TableModel;
+import model.Aquisicao;
+import model.Loja;
+import model.Produto;
+import model.TableModel;
+import formViews.CadastrarProduto;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import mainViews.MainLoja;
@@ -21,8 +24,18 @@ import mainViews.MainLoja;
  * @author aderito
  */
 public class AquisicoesView extends javax.swing.JFrame {
+    List<Produto> listaProdutos;
     Loja loja;
     MainLoja mainLoja;
+    CadastrarProduto cadastrarProduto;
+    Produto produto;
+    ProdutoJpaController pjc;
+    Aquisicao aquisicao;
+    AquisicaoJpaController ajc;
+    
+    Date fromDate, toDate;
+    
+    
     /**
      * Creates new form AquisicoesView
      */
@@ -43,6 +56,15 @@ public class AquisicoesView extends javax.swing.JFrame {
         btn_goBackMainLoja = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableProdutos = new javax.swing.JTable();
+        txt_searchField = new javax.swing.JTextField();
+        btn_searchProd = new javax.swing.JButton();
+        btn_cadProd = new javax.swing.JButton();
+        btn_deleteProd = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        fromDatePicker = new org.jdesktop.swingx.JXDatePicker();
+        jLabel3 = new javax.swing.JLabel();
+        toDatePicker = new org.jdesktop.swingx.JXDatePicker();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -69,6 +91,61 @@ public class AquisicoesView extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTableProdutos);
 
+        txt_searchField.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        txt_searchField.setForeground(new java.awt.Color(165, 151, 151));
+        txt_searchField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txt_searchFieldKeyPressed(evt);
+            }
+        });
+
+        btn_searchProd.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        btn_searchProd.setText("Procurar");
+        btn_searchProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_searchProdActionPerformed(evt);
+            }
+        });
+
+        btn_cadProd.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        btn_cadProd.setForeground(new java.awt.Color(21, 159, 21));
+        btn_cadProd.setText("Adicionar");
+        btn_cadProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cadProdActionPerformed(evt);
+            }
+        });
+
+        btn_deleteProd.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        btn_deleteProd.setForeground(new java.awt.Color(220, 15, 15));
+        btn_deleteProd.setText("Eliminar");
+        btn_deleteProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_deleteProdActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        jLabel2.setText("Por data:");
+
+        fromDatePicker.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fromDatePickerActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        jLabel3.setText("a");
+
+        toDatePicker.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                toDatePickerActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        jLabel4.setText("Por nome:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -76,12 +153,35 @@ public class AquisicoesView extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btn_goBackMainLoja)
-                        .addGap(176, 176, 176)
-                        .addComponent(jLabel1)
-                        .addGap(0, 223, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btn_cadProd)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_deleteProd))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btn_goBackMainLoja)
+                                .addGap(182, 182, 182)
+                                .addComponent(jLabel1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel4))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txt_searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btn_searchProd))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(fromDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(toDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(0, 177, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -91,8 +191,21 @@ public class AquisicoesView extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btn_goBackMainLoja)
                     .addComponent(jLabel1))
-                .addGap(30, 30, 30)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(fromDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(toDatePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_searchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_searchProd)
+                    .addComponent(btn_deleteProd, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_cadProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -109,19 +222,80 @@ public class AquisicoesView extends javax.swing.JFrame {
         mainLoja.setVisible(true);
     }//GEN-LAST:event_btn_goBackMainLojaActionPerformed
 
+    private void btn_deleteProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteProdActionPerformed
+        // TODO add your handling code here:
+        int nrRow = jTableProdutos.getSelectedRow();
+        
+        if(nrRow >= 0){
+            pjc = new ProdutoJpaController();
+            produto = pjc.findProduto((Integer) jTableProdutos.getValueAt(nrRow, 0));
+
+            try {
+                pjc.destroy(produto.getIdproduto());
+                fillTable(pjc.buscarProdutosPorLoja(loja.getIdloja()));
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error message: "+ e);
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Nenhum item selecionado! Selecione um item para apagar.");
+        }
+    }//GEN-LAST:event_btn_deleteProdActionPerformed
+
+    private void btn_cadProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cadProdActionPerformed
+        dispose();
+        cadastrarProduto = new CadastrarProduto();
+        cadastrarProduto.setIdLoja(loja);
+        cadastrarProduto.setVisible(true);
+    }//GEN-LAST:event_btn_cadProdActionPerformed
+
+    private void btn_searchProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_searchProdActionPerformed
+        String searchField = txt_searchField.getText();
+        pjc = new ProdutoJpaController();
+        
+        if(!searchField.equals("")){
+            fillTable(pjc.buscarProdutosPorNome(searchField));
+        }else{
+            JOptionPane.showMessageDialog(null, "Campo de pesquisa em branco!");
+        }
+    }//GEN-LAST:event_btn_searchProdActionPerformed
+
+    private void txt_searchFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_searchFieldKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_searchFieldKeyPressed
+
+    private void fromDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fromDatePickerActionPerformed
+        // TODO add your handling code here:
+        fromDate = fromDatePicker.getDate();
+    }//GEN-LAST:event_fromDatePickerActionPerformed
+
+    private void toDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toDatePickerActionPerformed
+        // TODO add your handling code here:
+        toDate = toDatePicker.getDate();
+        
+        if(fromDate!=null){
+            fillTable(pjc.buscarProdutosPorData(fromDate, toDate, listaProdutos));
+        }else{
+            JOptionPane.showMessageDialog(null, "Campo da data inicial em branco!");
+        }
+    }//GEN-LAST:event_toDatePickerActionPerformed
+
+    
     public void setIdLoja(Loja shop){
         loja = shop;
+        listaProdutos = new ArrayList<>();
+        pjc = new ProdutoJpaController();
+        listaProdutos = pjc.buscarProdutosPorLoja(loja.getIdloja());
         
-        fillTable();
+        fillTable(listaProdutos);
     }
 
-    public void fillTable(){
-        Aquisicao aquisicao;
-        ProdutoJpaController pjc = new ProdutoJpaController();
-        AquisicaoJpaController ajc = new AquisicaoJpaController();
+    public void fillTable(List<Produto> produtos){
+        aquisicao = new Aquisicao();
+        ajc = new AquisicaoJpaController();
         
         ArrayList data = new ArrayList();
-        String[] columns = new String[]{"Nome"
+        String[] columns = new String[]{"Cod."
+                , "Nome"
                 , "Fornecedor"
                 , "Quantidade"
                 , "Data_aquisicao"
@@ -129,17 +303,17 @@ public class AquisicoesView extends javax.swing.JFrame {
         
         try {
             
-            for(Produto p: pjc.buscarProdutosPorLoja(loja.getIdloja())){
+            produtos.stream().map((p) -> {
                 aquisicao = ajc.findAquisicao(p.getIdproduto());
-                
-                if(aquisicao.getQtdAdquirida() > 0){
-                    data.add(new Object[]{p.getNome()
-                            , aquisicao.getIdfornecedor().getNome()
-                            , aquisicao.getQtdAdquirida()
-                            , aquisicao.getDataAquisicao()
-                            , p.getPrecoCompra()});
-                }
-            }
+                return p;
+            }).filter((p) -> (aquisicao.getQtdAdquirida() > 0)).forEachOrdered((p) -> {
+                data.add(new Object[]{p.getIdproduto()
+                        , p.getNome()
+                        , aquisicao.getIdfornecedor().getNome()
+                        , aquisicao.getQtdAdquirida()
+                        , aquisicao.getDataAquisicao()
+                        , p.getPrecoCompra()});
+            });
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error filling arraylist! Error message: "+ e);
@@ -192,9 +366,18 @@ public class AquisicoesView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_cadProd;
+    private javax.swing.JButton btn_deleteProd;
     private javax.swing.JButton btn_goBackMainLoja;
+    private javax.swing.JButton btn_searchProd;
+    private org.jdesktop.swingx.JXDatePicker fromDatePicker;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableProdutos;
+    private org.jdesktop.swingx.JXDatePicker toDatePicker;
+    private javax.swing.JTextField txt_searchField;
     // End of variables declaration//GEN-END:variables
 }

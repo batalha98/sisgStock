@@ -11,8 +11,8 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import entitys.Aquisicao;
-import entitys.Fornecedor;
+import model.Aquisicao;
+import model.Fornecedor;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -44,7 +44,7 @@ public class FornecedorJpaController implements Serializable {
             em.getTransaction().begin();
             List<Aquisicao> attachedAquisicaoList = new ArrayList<Aquisicao>();
             for (Aquisicao aquisicaoListAquisicaoToAttach : fornecedor.getAquisicaoList()) {
-                aquisicaoListAquisicaoToAttach = em.getReference(aquisicaoListAquisicaoToAttach.getClass(), aquisicaoListAquisicaoToAttach.getIdproduto());
+                aquisicaoListAquisicaoToAttach = em.getReference(aquisicaoListAquisicaoToAttach.getClass(), aquisicaoListAquisicaoToAttach.getIdaquisicao());
                 attachedAquisicaoList.add(aquisicaoListAquisicaoToAttach);
             }
             fornecedor.setAquisicaoList(attachedAquisicaoList);
@@ -76,7 +76,7 @@ public class FornecedorJpaController implements Serializable {
             List<Aquisicao> aquisicaoListNew = fornecedor.getAquisicaoList();
             List<Aquisicao> attachedAquisicaoListNew = new ArrayList<Aquisicao>();
             for (Aquisicao aquisicaoListNewAquisicaoToAttach : aquisicaoListNew) {
-                aquisicaoListNewAquisicaoToAttach = em.getReference(aquisicaoListNewAquisicaoToAttach.getClass(), aquisicaoListNewAquisicaoToAttach.getIdproduto());
+                aquisicaoListNewAquisicaoToAttach = em.getReference(aquisicaoListNewAquisicaoToAttach.getClass(), aquisicaoListNewAquisicaoToAttach.getIdaquisicao());
                 attachedAquisicaoListNew.add(aquisicaoListNewAquisicaoToAttach);
             }
             aquisicaoListNew = attachedAquisicaoListNew;

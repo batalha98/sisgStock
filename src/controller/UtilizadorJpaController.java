@@ -7,7 +7,7 @@ package controller;
 
 import controller.exceptions.NonexistentEntityException;
 import controller.exceptions.PreexistingEntityException;
-import entitys.Utilizador;
+import model.Utilizador;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;

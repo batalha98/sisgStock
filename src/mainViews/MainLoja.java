@@ -5,7 +5,7 @@
  */
 package mainViews;
 
-import entitys.Loja;
+import model.Loja;
 import formViews.CadastrarProduto;
 import formViews.RegistarVenda;
 import javax.swing.JOptionPane;
@@ -43,7 +43,6 @@ public class MainLoja extends javax.swing.JFrame {
     private void initComponents() {
 
         selectedShop = new javax.swing.JLabel();
-        btn_goBack = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         btn_goto_cadProd = new javax.swing.JButton();
         btn_gotoRegVenda = new javax.swing.JButton();
@@ -56,13 +55,6 @@ public class MainLoja extends javax.swing.JFrame {
 
         selectedShop.setFont(new java.awt.Font("Arial Black", 0, 15)); // NOI18N
         selectedShop.setText("jLabel1");
-
-        btn_goBack.setText("<--");
-        btn_goBack.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_goBackActionPerformed(evt);
-            }
-        });
 
         jPanel1.setBackground(java.awt.Color.gray);
         jPanel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -138,9 +130,7 @@ public class MainLoja extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btn_goBack)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 224, Short.MAX_VALUE)
+                .addContainerGap(283, Short.MAX_VALUE)
                 .addComponent(selectedShop)
                 .addGap(268, 268, 268))
             .addGroup(layout.createSequentialGroup()
@@ -152,10 +142,8 @@ public class MainLoja extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(selectedShop)
-                    .addComponent(btn_goBack))
-                .addGap(52, 52, 52)
+                .addComponent(selectedShop)
+                .addGap(53, 53, 53)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(91, Short.MAX_VALUE))
         );
@@ -163,55 +151,48 @@ public class MainLoja extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_goBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_goBackActionPerformed
+    private void btn_goto_vendasViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_goto_vendasViewActionPerformed
         // TODO add your handling code here:
-        
-        dispose();
-        new Lojas().setVisible(true);
-    }//GEN-LAST:event_btn_goBackActionPerformed
 
-    private void btn_homeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_homeActionPerformed
-        // TODO add your handling code here:
-        
         dispose();
-        new MainWindow().setVisible(true);
-    }//GEN-LAST:event_btn_homeActionPerformed
-
-    private void btn_goto_cadProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_goto_cadProdActionPerformed
-        // TODO add your handling code here:
-        
-        dispose();
-        cadastrarProduto = new CadastrarProduto();
-        cadastrarProduto.setIdLoja(loja);
-        cadastrarProduto.setVisible(true);
-    }//GEN-LAST:event_btn_goto_cadProdActionPerformed
-
-    private void btn_gotoRegVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_gotoRegVendaActionPerformed
-        // TODO add your handling code here:
-        
-        dispose();
-        registarVenda = new RegistarVenda();
-        registarVenda.setIdLoja(loja);
-        registarVenda.setVisible(true);
-    }//GEN-LAST:event_btn_gotoRegVendaActionPerformed
+        vendasView = new VendasView();
+        vendasView.setIdLoja(loja);
+        vendasView.setVisible(true);
+    }//GEN-LAST:event_btn_goto_vendasViewActionPerformed
 
     private void btn_goto_aquisicoesViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_goto_aquisicoesViewActionPerformed
         // TODO add your handling code here:
-                      
+
         dispose();
         aquisicoesView = new AquisicoesView();
         aquisicoesView.setIdLoja(loja);
         aquisicoesView.setVisible(true);
     }//GEN-LAST:event_btn_goto_aquisicoesViewActionPerformed
 
-    private void btn_goto_vendasViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_goto_vendasViewActionPerformed
+    private void btn_homeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_homeActionPerformed
         // TODO add your handling code here:
-       
+
         dispose();
-        vendasView = new VendasView();
-        vendasView.setIdLoja(loja);
-        vendasView.setVisible(true);
-    }//GEN-LAST:event_btn_goto_vendasViewActionPerformed
+        new MainWindow().setVisible(true);
+    }//GEN-LAST:event_btn_homeActionPerformed
+
+    private void btn_gotoRegVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_gotoRegVendaActionPerformed
+        // TODO add your handling code here:
+
+        dispose();
+        registarVenda = new RegistarVenda();
+        registarVenda.setIdLoja(loja);
+        registarVenda.setVisible(true);
+    }//GEN-LAST:event_btn_gotoRegVendaActionPerformed
+
+    private void btn_goto_cadProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_goto_cadProdActionPerformed
+        // TODO add your handling code here:
+
+        dispose();
+        cadastrarProduto = new CadastrarProduto();
+        cadastrarProduto.setIdLoja(loja);
+        cadastrarProduto.setVisible(true);
+    }//GEN-LAST:event_btn_goto_cadProdActionPerformed
 
     /**
      * @param args the command line arguments
@@ -255,7 +236,6 @@ public class MainLoja extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn_goBack;
     private javax.swing.JButton btn_gotoRegVenda;
     private javax.swing.JButton btn_goto_aquisicoesView;
     private javax.swing.JButton btn_goto_cadProd;

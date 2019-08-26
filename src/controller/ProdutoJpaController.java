@@ -12,11 +12,13 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import entitys.Loja;
-import entitys.Produto;
-import entitys.Venda;
+import model.Loja;
+import model.Venda;
 import java.util.ArrayList;
 import java.util.List;
+import model.Aquisicao;
+import model.Produto;
+import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -26,7 +28,7 @@ import javax.persistence.Persistence;
  * @author aderito
  */
 public class ProdutoJpaController implements Serializable {
-
+    
     public ProdutoJpaController() {
         this.emf = Persistence.createEntityManagerFactory("SistemaGestaoStockPU");
     }
@@ -39,6 +41,9 @@ public class ProdutoJpaController implements Serializable {
     public void create(Produto produto) {
         if (produto.getVendaList() == null) {
             produto.setVendaList(new ArrayList<Venda>());
+        }
+        if (produto.getAquisicaoList() == null) {
+            produto.setAquisicaoList(new ArrayList<Aquisicao>());
         }
         EntityManager em = null;
         try {
@@ -55,6 +60,12 @@ public class ProdutoJpaController implements Serializable {
                 attachedVendaList.add(vendaListVendaToAttach);
             }
             produto.setVendaList(attachedVendaList);
+            List<Aquisicao> attachedAquisicaoList = new ArrayList<Aquisicao>();
+            for (Aquisicao aquisicaoListAquisicaoToAttach : produto.getAquisicaoList()) {
+                aquisicaoListAquisicaoToAttach = em.getReference(aquisicaoListAquisicaoToAttach.getClass(), aquisicaoListAquisicaoToAttach.getIdaquisicao());
+                attachedAquisicaoList.add(aquisicaoListAquisicaoToAttach);
+            }
+            produto.setAquisicaoList(attachedAquisicaoList);
             em.persist(produto);
             if (idloja != null) {
                 idloja.getProdutoList().add(produto);
@@ -67,6 +78,15 @@ public class ProdutoJpaController implements Serializable {
                 if (oldIdprodutoOfVendaListVenda != null) {
                     oldIdprodutoOfVendaListVenda.getVendaList().remove(vendaListVenda);
                     oldIdprodutoOfVendaListVenda = em.merge(oldIdprodutoOfVendaListVenda);
+                }
+            }
+            for (Aquisicao aquisicaoListAquisicao : produto.getAquisicaoList()) {
+                Produto oldIdprodutoOfAquisicaoListAquisicao = aquisicaoListAquisicao.getIdproduto();
+                aquisicaoListAquisicao.setIdproduto(produto);
+                aquisicaoListAquisicao = em.merge(aquisicaoListAquisicao);
+                if (oldIdprodutoOfAquisicaoListAquisicao != null) {
+                    oldIdprodutoOfAquisicaoListAquisicao.getAquisicaoList().remove(aquisicaoListAquisicao);
+                    oldIdprodutoOfAquisicaoListAquisicao = em.merge(oldIdprodutoOfAquisicaoListAquisicao);
                 }
             }
             em.getTransaction().commit();
@@ -87,6 +107,8 @@ public class ProdutoJpaController implements Serializable {
             Loja idlojaNew = produto.getIdloja();
             List<Venda> vendaListOld = persistentProduto.getVendaList();
             List<Venda> vendaListNew = produto.getVendaList();
+            List<Aquisicao> aquisicaoListOld = persistentProduto.getAquisicaoList();
+            List<Aquisicao> aquisicaoListNew = produto.getAquisicaoList();
             List<String> illegalOrphanMessages = null;
             for (Venda vendaListOldVenda : vendaListOld) {
                 if (!vendaListNew.contains(vendaListOldVenda)) {
@@ -110,6 +132,13 @@ public class ProdutoJpaController implements Serializable {
             }
             vendaListNew = attachedVendaListNew;
             produto.setVendaList(vendaListNew);
+            List<Aquisicao> attachedAquisicaoListNew = new ArrayList<Aquisicao>();
+            for (Aquisicao aquisicaoListNewAquisicaoToAttach : aquisicaoListNew) {
+                aquisicaoListNewAquisicaoToAttach = em.getReference(aquisicaoListNewAquisicaoToAttach.getClass(), aquisicaoListNewAquisicaoToAttach.getIdaquisicao());
+                attachedAquisicaoListNew.add(aquisicaoListNewAquisicaoToAttach);
+            }
+            aquisicaoListNew = attachedAquisicaoListNew;
+            produto.setAquisicaoList(aquisicaoListNew);
             produto = em.merge(produto);
             if (idlojaOld != null && !idlojaOld.equals(idlojaNew)) {
                 idlojaOld.getProdutoList().remove(produto);
@@ -127,6 +156,23 @@ public class ProdutoJpaController implements Serializable {
                     if (oldIdprodutoOfVendaListNewVenda != null && !oldIdprodutoOfVendaListNewVenda.equals(produto)) {
                         oldIdprodutoOfVendaListNewVenda.getVendaList().remove(vendaListNewVenda);
                         oldIdprodutoOfVendaListNewVenda = em.merge(oldIdprodutoOfVendaListNewVenda);
+                    }
+                }
+            }
+            for (Aquisicao aquisicaoListOldAquisicao : aquisicaoListOld) {
+                if (!aquisicaoListNew.contains(aquisicaoListOldAquisicao)) {
+                    aquisicaoListOldAquisicao.setIdproduto(null);
+                    aquisicaoListOldAquisicao = em.merge(aquisicaoListOldAquisicao);
+                }
+            }
+            for (Aquisicao aquisicaoListNewAquisicao : aquisicaoListNew) {
+                if (!aquisicaoListOld.contains(aquisicaoListNewAquisicao)) {
+                    Produto oldIdprodutoOfAquisicaoListNewAquisicao = aquisicaoListNewAquisicao.getIdproduto();
+                    aquisicaoListNewAquisicao.setIdproduto(produto);
+                    aquisicaoListNewAquisicao = em.merge(aquisicaoListNewAquisicao);
+                    if (oldIdprodutoOfAquisicaoListNewAquisicao != null && !oldIdprodutoOfAquisicaoListNewAquisicao.equals(produto)) {
+                        oldIdprodutoOfAquisicaoListNewAquisicao.getAquisicaoList().remove(aquisicaoListNewAquisicao);
+                        oldIdprodutoOfAquisicaoListNewAquisicao = em.merge(oldIdprodutoOfAquisicaoListNewAquisicao);
                     }
                 }
             }
@@ -174,6 +220,11 @@ public class ProdutoJpaController implements Serializable {
             if (idloja != null) {
                 idloja.getProdutoList().remove(produto);
                 idloja = em.merge(idloja);
+            }
+            List<Aquisicao> aquisicaoList = produto.getAquisicaoList();
+            for (Aquisicao aquisicaoListAquisicao : aquisicaoList) {
+                aquisicaoListAquisicao.setIdproduto(null);
+                aquisicaoListAquisicao = em.merge(aquisicaoListAquisicao);
             }
             em.remove(produto);
             em.getTransaction().commit();
@@ -232,12 +283,52 @@ public class ProdutoJpaController implements Serializable {
     
     public List<Produto> buscarProdutosPorLoja(int idloja){
         List<Produto> produtos = new ArrayList<>();
-        
         findProdutoEntities().stream().filter((p) -> (p.getIdloja().getIdloja() == idloja)).forEachOrdered((p) -> {
             produtos.add(p);
         });
         
         return produtos;
+    }
+    
+    public List<Produto> buscarProdutosPorNome(String nome){ 
+        List<Produto> produtos = new ArrayList<>();
+        for(Produto p: findProdutoEntities()){
+            
+            if(p.getNome().contains(nome)){
+                produtos.add(p);
+            }
+            
+        }
+        
+        return produtos;
+    }
+    
+    public List<Produto> buscarProdutosPorData(Date from, Date to, List<Produto> list){
+        Aquisicao aquisicao = new Aquisicao();
+        AquisicaoJpaController ajc = new AquisicaoJpaController();
+        List<Produto> produtos = new ArrayList<>();
+        
+        if(from != null && to!=null){
+            for(Produto p: list){
+                aquisicao = ajc.findAquisicao(p.getIdproduto());
+
+                if((aquisicao.getDataAquisicao().after(from)) 
+                        && (aquisicao.getDataAquisicao().before(to))){
+
+                    produtos.add(p);
+
+                }else if((aquisicao.getDataAquisicao().equals(from)) 
+                        && (aquisicao.getDataAquisicao().before(to))){
+                    produtos.add(p);
+                }else if((aquisicao.getDataAquisicao().equals(from)) 
+                        && (aquisicao.getDataAquisicao().equals(to))){
+                    produtos.add(p);
+                }
+            }
+            return produtos;
+        }
+        
+        return null;
     }
     
 }

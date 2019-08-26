@@ -6,7 +6,7 @@
 package formViews;
 
 import controller.FornecedorJpaController;
-import entitys.Fornecedor;
+import model.Fornecedor;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import mainViews.MainWindow;

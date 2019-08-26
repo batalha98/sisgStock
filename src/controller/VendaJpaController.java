@@ -7,23 +7,27 @@ package controller;
 
 import controller.exceptions.NonexistentEntityException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import entitys.Produto;
-import entitys.Venda;
+import model.Produto;
+import model.Venda;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import model.Loja;
 
 /**
  *
  * @author aderito
  */
 public class VendaJpaController implements Serializable {
-
+    private Venda venda;
+    
     public VendaJpaController() {
         this.emf = Persistence.createEntityManagerFactory("SistemaGestaoStockPU");
     }
@@ -166,4 +170,57 @@ public class VendaJpaController implements Serializable {
         }
     }
     
+    public List<Venda> buscarVendasPorNomeProd(String nomeProduto){ 
+        List<Venda> vendas = new ArrayList<>();
+        
+        for(Venda v: findVendaEntities()){
+            
+            if(v.getIdproduto().getNome().contains(nomeProduto)){
+                vendas.add(v);
+            }
+           
+        }
+        
+        return vendas;
+    }
+    
+     public List<Venda> buscarVendasDaLoja(int idloja){
+        List<Venda> vendas = new ArrayList<>();
+         
+        for(Venda v: findVendaEntities()){
+
+            if(v.getIdproduto().getIdloja().getIdloja().equals(idloja)){
+                vendas.add(v);
+            }
+           
+        }
+        
+        return vendas;
+    }
+     
+    public List<Venda> buscarVendasPorData(Date from, Date to, List<Venda> list){
+        List<Venda> vendas = new ArrayList<>();
+        
+        if(from != null && to!=null){
+            list.forEach((v) -> {
+                if((v.getDataVenda().after(from)) 
+                        && (v.getDataVenda().before(to))){
+
+                    vendas.add(v);
+                    
+                }else if((v.getDataVenda().equals(from)) 
+                        && (v.getDataVenda().before(to))){
+                    vendas.add(v);
+                }else if((v.getDataVenda().equals(from)) 
+                        && (v.getDataVenda().equals(to))){
+                    vendas.add(v);
+                }else if((v.getDataVenda().after(from)) 
+                        && (v.getDataVenda().equals(to))){
+                    vendas.add(v);
+                }
+            });
+            return vendas;
+        }
+        return null;
+    }
 }

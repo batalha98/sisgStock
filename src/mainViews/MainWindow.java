@@ -32,7 +32,6 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         goto_cadLojaForm = new javax.swing.JButton();
         goto_LojasCad = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
         btn_gotoCadFornecedor = new javax.swing.JButton();
         btn_sair = new javax.swing.JButton();
 
@@ -42,6 +41,7 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel1.setText("Sistema de Gestao de Stock");
 
         goto_cadLojaForm.setText("Cadastrar Loja");
+        goto_cadLojaForm.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         goto_cadLojaForm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 goto_cadLojaFormActionPerformed(evt);
@@ -55,9 +55,6 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Ubuntu", 1, 13)); // NOI18N
-        jLabel2.setText("versao 1.0");
-
         btn_gotoCadFornecedor.setText("Cadastrar fornecedor");
         btn_gotoCadFornecedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -65,6 +62,7 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        btn_sair.setForeground(new java.awt.Color(220, 15, 15));
         btn_sair.setText("Sair");
         btn_sair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -82,25 +80,20 @@ public class MainWindow extends javax.swing.JFrame {
                         .addGap(168, 168, 168)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(211, 211, 211)
+                        .addGap(223, 223, 223)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(goto_cadLojaForm, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btn_gotoCadFornecedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(goto_LojasCad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(goto_LojasCad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btn_sair, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(181, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btn_sair, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(272, 272, 272))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addComponent(jLabel1)
-                .addGap(60, 60, 60)
+                .addGap(45, 45, 45)
                 .addComponent(goto_cadLojaForm)
                 .addGap(18, 18, 18)
                 .addComponent(btn_gotoCadFornecedor)
@@ -108,18 +101,11 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(goto_LojasCad)
                 .addGap(18, 18, 18)
                 .addComponent(btn_sair)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void goto_cadLojaFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goto_cadLojaFormActionPerformed
-        dispose();
-        new CadastrarLoja().setVisible(true);
-    }//GEN-LAST:event_goto_cadLojaFormActionPerformed
 
     private void goto_LojasCadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goto_LojasCadActionPerformed
         dispose();
@@ -136,6 +122,11 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_btn_sairActionPerformed
+
+    private void goto_cadLojaFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goto_cadLojaFormActionPerformed
+        dispose();
+        new CadastrarLoja().setVisible(true);
+    }//GEN-LAST:event_goto_cadLojaFormActionPerformed
 
     /**
      * @param args the command line arguments
@@ -179,6 +170,5 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton goto_LojasCad;
     private javax.swing.JButton goto_cadLojaForm;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }

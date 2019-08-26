@@ -7,11 +7,14 @@ package productsView;
 
 import controller.ProdutoJpaController;
 import controller.VendaJpaController;
-import entitys.Loja;
-import entitys.Produto;
-import entitys.TableModel;
-import entitys.Venda;
+import formViews.RegistarVenda;
+import model.Loja;
+import model.Produto;
+import model.TableModel;
+import model.Venda;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import mainViews.MainLoja;
@@ -21,7 +24,12 @@ import mainViews.MainLoja;
  * @author aderito
  */
 public class VendasView extends javax.swing.JFrame {
+    List<Venda> listaVendas;
+    Venda venda;
+    VendaJpaController vjc;
     Loja loja;
+    
+    Date fromDate, toDate;
     /**
      * Creates new form VendasView
      */
@@ -42,6 +50,15 @@ public class VendasView extends javax.swing.JFrame {
         btn_goBackMainLoja = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableVendas = new javax.swing.JTable();
+        btn_regVenda = new javax.swing.JButton();
+        txt_searchField = new javax.swing.JTextField();
+        btn_search = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        from_date = new org.jdesktop.swingx.JXDatePicker();
+        to_date = new org.jdesktop.swingx.JXDatePicker();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        btn_removeRecord = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -68,6 +85,56 @@ public class VendasView extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTableVendas);
 
+        btn_regVenda.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        btn_regVenda.setForeground(new java.awt.Color(21, 159, 21));
+        btn_regVenda.setText("Registar venda");
+        btn_regVenda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_regVendaActionPerformed(evt);
+            }
+        });
+
+        txt_searchField.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        txt_searchField.setForeground(new java.awt.Color(165, 151, 151));
+
+        btn_search.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        btn_search.setText("Procurar");
+        btn_search.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_searchActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        jLabel2.setText("Por data:");
+
+        from_date.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                from_dateActionPerformed(evt);
+            }
+        });
+
+        to_date.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                to_dateActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        jLabel3.setText("a");
+
+        jLabel4.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        jLabel4.setText("Por nome:");
+
+        btn_removeRecord.setFont(new java.awt.Font("Ubuntu", 0, 12)); // NOI18N
+        btn_removeRecord.setForeground(new java.awt.Color(220, 15, 15));
+        btn_removeRecord.setText("Eliminar");
+        btn_removeRecord.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_removeRecordActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -82,7 +149,29 @@ public class VendasView extends javax.swing.JFrame {
                         .addGap(226, 226, 226))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jScrollPane1)
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(from_date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(to_date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txt_searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btn_search)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btn_regVenda)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btn_removeRecord)
+                                .addContainerGap())))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -91,8 +180,22 @@ public class VendasView extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btn_goBackMainLoja)
                     .addComponent(jLabel1))
-                .addGap(30, 30, 30)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                .addGap(40, 40, 40)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(from_date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(to_date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txt_searchField)
+                    .addComponent(btn_search, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel4)
+                        .addComponent(btn_regVenda)
+                        .addComponent(btn_removeRecord)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -109,30 +212,90 @@ public class VendasView extends javax.swing.JFrame {
         mainLoja.setVisible(true);
     }//GEN-LAST:event_btn_goBackMainLojaActionPerformed
 
+    private void btn_regVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_regVendaActionPerformed
+        // TODO add your handling code here:
+        RegistarVenda registarVenda;
+        
+        dispose();
+        registarVenda = new RegistarVenda();
+        registarVenda.setIdLoja(loja);
+        registarVenda.setVisible(true);
+    }//GEN-LAST:event_btn_regVendaActionPerformed
+
+    private void btn_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_searchActionPerformed
+        String searchField = txt_searchField.getText();
+        vjc = new VendaJpaController();
+        
+        if(!searchField.equals("")){
+            fillTable(vjc.buscarVendasPorNomeProd(searchField));
+        }else{
+            JOptionPane.showMessageDialog(null, "Campo de pesquisa em branco!");
+        }
+    }//GEN-LAST:event_btn_searchActionPerformed
+
+    private void btn_removeRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_removeRecordActionPerformed
+        int nrRow = jTableVendas.getSelectedRow();
+        
+        if(nrRow >= 0){
+            vjc = new VendaJpaController();
+            venda = vjc.findVenda((Integer)jTableVendas.getValueAt(nrRow, 0));
+ 
+            try {
+                vjc.destroy(venda.getIdvenda());
+                fillTable(vjc.buscarVendasDaLoja(loja.getIdloja()));
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error message: "+ e);
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Nenhum item selecionado! Selecione um item para apagar.");
+        }
+    }//GEN-LAST:event_btn_removeRecordActionPerformed
+
+    private void from_dateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_from_dateActionPerformed
+        // TODO add your handling code here:
+        fromDate = from_date.getDate();
+    }//GEN-LAST:event_from_dateActionPerformed
+
+    private void to_dateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_to_dateActionPerformed
+        // TODO add your handling code here:
+        toDate = to_date.getDate();
+
+        if(fromDate!=null){
+            fillTable(vjc.buscarVendasPorData(fromDate, toDate, listaVendas));
+        }else{
+            JOptionPane.showMessageDialog(null, "Campo da data inicial em branco!");
+        }
+    }//GEN-LAST:event_to_dateActionPerformed
+
+    
     public void setIdLoja(Loja shop){
         loja = shop;
+        listaVendas = new ArrayList<>();
+        vjc = new VendaJpaController();
+        listaVendas = vjc.buscarVendasDaLoja(loja.getIdloja());
         
-        fillTable();
+        fillTable(listaVendas);
     }
     
-    public void fillTable(){
+    public void fillTable(List<Venda> vendas){
         Produto produto; 
-        VendaJpaController vjc = new VendaJpaController();
         ProdutoJpaController pjc = new ProdutoJpaController();
         
         ArrayList data = new ArrayList();
-        String[] columns = new String[]{"Nome_Produto"
+        String[] columns = new String[]{"Cod."
+                , "Nome_Produto"
                 , "Data_venda"
                 , "Quantidade"
                 , "Preco_venda"};
         
         try {
             
-            for(Venda v: vjc.findVendaEntities()){  
+            for(Venda v: vendas){  
                 produto = pjc.findProduto(v.getIdproduto().getIdproduto());
                         
                 if(produto.getIdloja().getIdloja() == loja.getIdloja()){
-                    data.add(new Object[]{v.getIdproduto().getNome()
+                    data.add(new Object[]{v.getIdvenda()
+                            , v.getIdproduto().getNome()
                             , v.getDataVenda()
                             , v.getQtdVendido()
                             , v.getIdproduto().getPrecoVenda()});
@@ -192,8 +355,17 @@ public class VendasView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_goBackMainLoja;
+    private javax.swing.JButton btn_regVenda;
+    private javax.swing.JButton btn_removeRecord;
+    private javax.swing.JButton btn_search;
+    private org.jdesktop.swingx.JXDatePicker from_date;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableVendas;
+    private org.jdesktop.swingx.JXDatePicker to_date;
+    private javax.swing.JTextField txt_searchField;
     // End of variables declaration//GEN-END:variables
 }

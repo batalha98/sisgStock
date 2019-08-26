@@ -3,13 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entitys;
+package model;
 
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -29,16 +31,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Aquisicao.findAll", query = "SELECT a FROM Aquisicao a")
-    , @NamedQuery(name = "Aquisicao.findByIdproduto", query = "SELECT a FROM Aquisicao a WHERE a.idproduto = :idproduto")
+    , @NamedQuery(name = "Aquisicao.findByIdaquisicao", query = "SELECT a FROM Aquisicao a WHERE a.idaquisicao = :idaquisicao")
     , @NamedQuery(name = "Aquisicao.findByQtdAdquirida", query = "SELECT a FROM Aquisicao a WHERE a.qtdAdquirida = :qtdAdquirida")
     , @NamedQuery(name = "Aquisicao.findByDataAquisicao", query = "SELECT a FROM Aquisicao a WHERE a.dataAquisicao = :dataAquisicao")})
 public class Aquisicao implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "idproduto")
-    private Integer idproduto;
+    @Column(name = "idaquisicao")
+    private Integer idaquisicao;
     @Column(name = "qtdAdquirida")
     private Integer qtdAdquirida;
     @Column(name = "dataAquisicao")
@@ -47,20 +50,23 @@ public class Aquisicao implements Serializable {
     @JoinColumn(name = "idfornecedor", referencedColumnName = "idfornecedor")
     @ManyToOne
     private Fornecedor idfornecedor;
+    @JoinColumn(name = "idproduto", referencedColumnName = "idproduto")
+    @ManyToOne
+    private Produto idproduto;
 
     public Aquisicao() {
     }
 
-    public Aquisicao(Integer idproduto) {
-        this.idproduto = idproduto;
+    public Aquisicao(Integer idaquisicao) {
+        this.idaquisicao = idaquisicao;
     }
 
-    public Integer getIdproduto() {
-        return idproduto;
+    public Integer getIdaquisicao() {
+        return idaquisicao;
     }
 
-    public void setIdproduto(Integer idproduto) {
-        this.idproduto = idproduto;
+    public void setIdaquisicao(Integer idaquisicao) {
+        this.idaquisicao = idaquisicao;
     }
 
     public Integer getQtdAdquirida() {
@@ -87,10 +93,18 @@ public class Aquisicao implements Serializable {
         this.idfornecedor = idfornecedor;
     }
 
+    public Produto getIdproduto() {
+        return idproduto;
+    }
+
+    public void setIdproduto(Produto idproduto) {
+        this.idproduto = idproduto;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idproduto != null ? idproduto.hashCode() : 0);
+        hash += (idaquisicao != null ? idaquisicao.hashCode() : 0);
         return hash;
     }
 
@@ -101,7 +115,7 @@ public class Aquisicao implements Serializable {
             return false;
         }
         Aquisicao other = (Aquisicao) object;
-        if ((this.idproduto == null && other.idproduto != null) || (this.idproduto != null && !this.idproduto.equals(other.idproduto))) {
+        if ((this.idaquisicao == null && other.idaquisicao != null) || (this.idaquisicao != null && !this.idaquisicao.equals(other.idaquisicao))) {
             return false;
         }
         return true;
@@ -109,7 +123,7 @@ public class Aquisicao implements Serializable {
 
     @Override
     public String toString() {
-        return "entitys.Aquisicao[ idproduto=" + idproduto + " ]";
+        return "entitys.Aquisicao[ idaquisicao=" + idaquisicao + " ]";
     }
     
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entitys;
+package model;
 
 import java.io.Serializable;
 import java.util.List;
@@ -56,6 +56,8 @@ public class Produto implements Serializable {
     @JoinColumn(name = "idloja", referencedColumnName = "idloja")
     @ManyToOne
     private Loja idloja;
+    @OneToMany(mappedBy = "idproduto")
+    private List<Aquisicao> aquisicaoList;
 
     public Produto() {
     }
@@ -111,6 +113,15 @@ public class Produto implements Serializable {
 
     public void setIdloja(Loja idloja) {
         this.idloja = idloja;
+    }
+
+    @XmlTransient
+    public List<Aquisicao> getAquisicaoList() {
+        return aquisicaoList;
+    }
+
+    public void setAquisicaoList(List<Aquisicao> aquisicaoList) {
+        this.aquisicaoList = aquisicaoList;
     }
 
     @Override

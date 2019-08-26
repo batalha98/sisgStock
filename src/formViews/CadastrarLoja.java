@@ -6,7 +6,7 @@
 package formViews;
 
 import controller.LojaJpaController;
-import entitys.Loja;
+import model.Loja;
 import java.awt.event.KeyEvent;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;

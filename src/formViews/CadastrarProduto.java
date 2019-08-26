@@ -8,10 +8,10 @@ package formViews;
 import controller.AquisicaoJpaController;
 import controller.FornecedorJpaController;
 import controller.ProdutoJpaController;
-import entitys.Aquisicao;
-import entitys.Fornecedor;
-import entitys.Loja;
-import entitys.Produto;
+import model.Aquisicao;
+import model.Fornecedor;
+import model.Loja;
+import model.Produto;
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,12 +70,12 @@ public class CadastrarProduto extends javax.swing.JFrame {
         title_cad_Produto = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        datePicker_dataAquisicao = new org.jdesktop.swingx.JXDatePicker();
         jLabel6 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         txt_PrecoVenda = new javax.swing.JTextField();
         cBox_fornecedor = new javax.swing.JComboBox<>();
         btn_goBack_MainLoja = new javax.swing.JButton();
+        datePicker_dataAquisicao = new org.jdesktop.swingx.JXDatePicker();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -142,17 +142,7 @@ public class CadastrarProduto extends javax.swing.JFrame {
                     .addComponent(cBox_fornecedor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txt_NomeProduto)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(spinner_qtdAquisicao, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(41, 41, 41)
-                        .addComponent(datePicker_dataAquisicao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(41, 41, 41)
-                                .addComponent(jLabel5))
                             .addComponent(jLabel6)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
@@ -160,7 +150,17 @@ public class CadastrarProduto extends javax.swing.JFrame {
                                 .addComponent(btn_goBack_MainLoja)
                                 .addGap(165, 165, 165)
                                 .addComponent(title_cad_Produto)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 197, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(spinner_qtdAquisicao, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(41, 41, 41)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(datePicker_dataAquisicao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(260, 260, 260)
@@ -200,7 +200,7 @@ public class CadastrarProduto extends javax.swing.JFrame {
                 .addComponent(txt_PrecoVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20)
                 .addComponent(btn_cadastrarProduto)
-                .addGap(20, 20, 20))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -211,9 +211,7 @@ public class CadastrarProduto extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 412, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)
         );
 
         pack();
@@ -229,11 +227,11 @@ public class CadastrarProduto extends javax.swing.JFrame {
             
             pjc.create(produto);
 
+            aquisicao.setIdproduto(produto);
             aquisicao.setDataAquisicao(datePicker_dataAquisicao.getDate());
             aquisicao.setQtdAdquirida((Integer) spinner_qtdAquisicao.getValue());
-            aquisicao.setIdproduto(produto.getIdproduto());
-            
             aquisicao.setIdfornecedor((Fornecedor) cBox_fornecedor.getSelectedItem());
+            
             ajc.create(aquisicao);
             
             JOptionPane.showMessageDialog(null
@@ -269,8 +267,7 @@ public class CadastrarProduto extends javax.swing.JFrame {
     private void btn_cadastrarProdutoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_cadastrarProdutoKeyPressed
 
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){           
-            try {
-
+            try {      
                 produto.setNome(txt_NomeProduto.getText());
                 produto.setPrecoCompra(Double.parseDouble(txt_PrecoCompra.getText()));
                 produto.setPrecoVenda(Double.parseDouble(txt_PrecoVenda.getText()));
@@ -278,11 +275,11 @@ public class CadastrarProduto extends javax.swing.JFrame {
 
                 pjc.create(produto);
 
+                aquisicao.setIdproduto(produto);
                 aquisicao.setDataAquisicao(datePicker_dataAquisicao.getDate());
                 aquisicao.setQtdAdquirida((Integer) spinner_qtdAquisicao.getValue());
-                aquisicao.setIdproduto(produto.getIdproduto());
-
                 aquisicao.setIdfornecedor((Fornecedor) cBox_fornecedor.getSelectedItem());
+
                 ajc.create(aquisicao);
 
                 JOptionPane.showMessageDialog(null
@@ -291,7 +288,7 @@ public class CadastrarProduto extends javax.swing.JFrame {
                         , JOptionPane.INFORMATION_MESSAGE);
 
                 AquisicoesView aquisicoesView = new AquisicoesView();
-                
+
                 dispose();
                 aquisicoesView.setIdLoja(loja);
                 aquisicoesView.setVisible(true);
@@ -353,7 +350,7 @@ public class CadastrarProduto extends javax.swing.JFrame {
     private javax.swing.JButton btn_goBack_MainLoja;
     private javax.swing.JComboBox<Object> cBox_fornecedor;
     private org.jdesktop.swingx.JXDatePicker datePicker_dataAquisicao;
-    private java.util.List<entitys.Fornecedor> fornecedorList;
+    private java.util.List<model.Fornecedor> fornecedorList;
     private javax.persistence.Query fornecedorQuery;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
